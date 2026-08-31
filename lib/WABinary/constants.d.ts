@@ -25,6 +25,18 @@ export declare const TOKEN_MAP: {
         index: number;
     };
 };
+export const CPP_KEYWORDS: Set<string>;
+export const CSS_KEYWORDS: Set<string>;
+export const GO_KEYWORDS: Set<string>;
+export const HTML_KEYWORDS: Set<string>;
+export const JS_KEYWORDS: Set<string>;
+export const PYTHON_KEYWORDS: Set<string>;
+export const RUST_KEYWORDS: Set<string>;
+export const C_KEYWORDS: Set<string>;
+export const CSHARP_KEYWORDS: Set<string>;
+export const BASH_KEYWORDS: Set<string>;
+export const CMD_KEYWORDS: Set<string>;
+export const POWERSHELL_KEYWORDS: Set<string>
 export const LANGUAGE_KEYWORDS: {
     css: Set<string>;
     html: Set<string>;
