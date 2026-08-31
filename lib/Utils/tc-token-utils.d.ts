@@ -1,30 +1,37 @@
+import type { SignalKeyStoreWithTransaction } from '../Types/index.js';
+import type { BinaryNode } from '../WABinary/index.js';
+/** Sentinel key under `tctoken` store holding a JSON array of tracked storage JIDs for cross-session pruning. */
+export declare const TC_TOKEN_INDEX_KEY = "__index";
 /** Read the persisted tctoken JID index and return its entries (never contains the sentinel key itself). */
-export function readTcTokenIndex(keys: any): Promise<any[]>;
+export declare function readTcTokenIndex(keys: SignalKeyStoreWithTransaction): Promise<string[]>;
 /** Build a SignalDataSet fragment that writes the merged index (persisted ∪ added) under the sentinel key. */
-export function buildMergedTcTokenIndexWrite(keys: any, addedJids: any): Promise<{
-    __index: {
-        token: any;
+export declare function buildMergedTcTokenIndexWrite(keys: SignalKeyStoreWithTransaction, addedJids: Iterable<string>): Promise<{
+    [TC_TOKEN_INDEX_KEY]: {
+        token: Buffer;
     };
 }>;
-export function isTcTokenExpired(timestamp: any): boolean;
-export function shouldSendNewTcToken(senderTimestamp: any): boolean;
+export declare function isTcTokenExpired(timestamp: number | string | null | undefined): boolean;
+export declare function shouldSendNewTcToken(senderTimestamp: number | undefined): boolean;
 /** Resolve JID to LID for tctoken storage (WA Web stores under LID) */
-export function resolveTcTokenJid(jid: any, getLIDForPN: any): Promise<any>;
+export declare function resolveTcTokenJid(jid: string, getLIDForPN: (pn: string) => Promise<string | null>): Promise<string>;
 /** Resolve target JID for issuing privacy token based on AB prop 14303 */
-export function resolveIssuanceJid(jid: any, issueToLid: any, getLIDForPN: any, getPNForLID: any): Promise<any>;
-export function buildTcTokenFromJid({ authState, jid, baseContent, getLIDForPN }: {
-    authState: any;
-    jid: any;
-    baseContent?: never[] | undefined;
-    getLIDForPN: any;
-}): Promise<any[] | undefined>;
-export function storeTcTokensFromIqResult({ result, fallbackJid, keys, getLIDForPN, onNewJidStored }: {
-    result: any;
-    fallbackJid: any;
-    keys: any;
-    getLIDForPN: any;
-    onNewJidStored: any;
-}): Promise<void>;
-/** Sentinel key under `tctoken` store holding a JSON array of tracked storage JIDs for cross-session pruning. */
-export const TC_TOKEN_INDEX_KEY: "__index";
+export declare function resolveIssuanceJid(jid: string, issueToLid: boolean, getLIDForPN: (pn: string) => Promise<string | null>, getPNForLID?: (lid: string) => Promise<string | null>): Promise<string>;
+type TcTokenParams = {
+    jid: string;
+    baseContent?: BinaryNode[];
+    authState: {
+        keys: SignalKeyStoreWithTransaction;
+    };
+    getLIDForPN: (pn: string) => Promise<string | null>;
+};
+export declare function buildTcTokenFromJid({ authState, jid, baseContent, getLIDForPN }: TcTokenParams): Promise<BinaryNode[] | undefined>;
+type StoreTcTokensParams = {
+    result: BinaryNode;
+    fallbackJid: string;
+    keys: SignalKeyStoreWithTransaction;
+    getLIDForPN: (pn: string) => Promise<string | null>;
+    onNewJidStored?: (jid: string) => void;
+};
+export declare function storeTcTokensFromIqResult({ result, fallbackJid, keys, getLIDForPN, onNewJidStored }: StoreTcTokensParams): Promise<void>;
+export {};
 //# sourceMappingURL=tc-token-utils.d.ts.map

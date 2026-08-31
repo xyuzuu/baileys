@@ -1,37 +1,10 @@
-export class USyncContactProtocol {
+import type { USyncQueryProtocol } from '../../Types/USync.js';
+import { type BinaryNode } from '../../WABinary/index.js';
+import { USyncUser } from '../USyncUser.js';
+export declare class USyncContactProtocol implements USyncQueryProtocol {
     name: string;
-    getQueryElement(): {
-        tag: string;
-        attrs: {};
-    };
-    getUserElement(user: any): {
-        tag: string;
-        attrs: {
-            type?: undefined;
-        };
-        content: any;
-    } | {
-        tag: string;
-        attrs: {
-            lid?: any;
-            pin?: any;
-            username: any;
-            type?: undefined;
-        };
-        content?: undefined;
-    } | {
-        tag: string;
-        attrs: {
-            type: any;
-        };
-        content?: undefined;
-    } | {
-        tag: string;
-        attrs: {
-            type?: undefined;
-        };
-        content?: undefined;
-    };
-    parser(node: any): boolean;
+    getQueryElement(): BinaryNode;
+    getUserElement(user: USyncUser): BinaryNode;
+    parser(node: BinaryNode): boolean;
 }
 //# sourceMappingURL=USyncContactProtocol.d.ts.map

@@ -1,10 +1,7 @@
-export function decompressingIfRequired(buffer: any): Promise<any>;
-export function decodeDecompressedBinaryNode(buffer: any, opts: any, indexRef?: {
+import type { BinaryNode, BinaryNodeCodingOptions } from './types.js';
+export declare const decompressingIfRequired: (buffer: Buffer) => Promise<Buffer<ArrayBufferLike>>;
+export declare const decodeDecompressedBinaryNode: (buffer: Buffer, opts: Pick<BinaryNodeCodingOptions, "DOUBLE_BYTE_TOKENS" | "SINGLE_BYTE_TOKENS" | "TAGS">, indexRef?: {
     index: number;
-}): {
-    tag: any;
-    attrs: {};
-    content: any;
-};
-export function decodeBinaryNode(buff: any): Promise<any>;
+}) => BinaryNode;
+export declare const decodeBinaryNode: (buff: Buffer) => Promise<BinaryNode>;
 //# sourceMappingURL=decode.d.ts.map

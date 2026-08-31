@@ -1,40 +1,37 @@
+import type { KeyPair } from '../Types/index.js';
+export { md5, hkdf } from 'whatsapp-rust-bridge';
+/** prefix version byte to the pub keys, required for some curve crypto functions */
+export declare const generateSignalPubKey: (pubKey: Uint8Array | Buffer) => Uint8Array<ArrayBufferLike> | Buffer<ArrayBufferLike>;
+export declare const Curve: {
+    generateKeyPair: () => KeyPair;
+    sharedKey: (privateKey: Uint8Array, publicKey: Uint8Array) => Buffer<ArrayBuffer>;
+    sign: (privateKey: Uint8Array, buf: Uint8Array) => Uint8Array<ArrayBufferLike>;
+    verify: (pubKey: Uint8Array, message: Uint8Array, signature: Uint8Array) => boolean;
+};
+export declare const signedKeyPair: (identityKeyPair: KeyPair, keyId: number) => {
+    keyPair: KeyPair;
+    signature: Uint8Array<ArrayBufferLike>;
+    keyId: number;
+};
 /**
  * encrypt AES 256 GCM;
  * where the tag tag is suffixed to the ciphertext
  * */
-export function aesEncryptGCM(plaintext: any, key: any, iv: any, additionalData: any): any;
+export declare function aesEncryptGCM(plaintext: Uint8Array, key: Uint8Array, iv: Uint8Array, additionalData: Uint8Array): Buffer<ArrayBuffer>;
 /**
  * decrypt AES 256 GCM;
  * where the auth tag is suffixed to the ciphertext
  * */
-export function aesDecryptGCM(ciphertext: any, key: any, iv: any, additionalData: any): any;
-export function aesEncryptCTR(plaintext: any, key: any, iv: any): any;
-export function aesDecryptCTR(ciphertext: any, key: any, iv: any): any;
+export declare function aesDecryptGCM(ciphertext: Uint8Array, key: Uint8Array, iv: Uint8Array, additionalData: Uint8Array): Buffer<ArrayBuffer>;
+export declare function aesEncryptCTR(plaintext: Uint8Array, key: Uint8Array, iv: Uint8Array): Buffer<ArrayBuffer>;
+export declare function aesDecryptCTR(ciphertext: Uint8Array, key: Uint8Array, iv: Uint8Array): Buffer<ArrayBuffer>;
 /** decrypt AES 256 CBC; where the IV is prefixed to the buffer */
-export function aesDecrypt(buffer: any, key: any): any;
+export declare function aesDecrypt(buffer: Uint8Array, key: Uint8Array): Buffer<ArrayBuffer>;
 /** decrypt AES 256 CBC */
-export function aesDecryptWithIV(buffer: any, key: any, IV: any): any;
-export function aesEncrypt(buffer: any, key: any): any;
-export function aesEncrypWithIV(buffer: any, key: any, IV: any): any;
-export function hmacSign(buffer: any, key: any, variant?: string): any;
-export function sha256(buffer: any): any;
-export function derivePairingCodeKey(pairingCode: any, salt: any): Promise<any>;
-export function generateSignalPubKey(pubKey: any): any;
-export namespace Curve {
-    function generateKeyPair(): {
-        private: any;
-        public: any;
-    };
-    function sharedKey(privateKey: any, publicKey: any): any;
-    function sign(privateKey: any, buf: any): any;
-    function verify(pubKey: any, message: any, signature: any): boolean;
-}
-export function signedKeyPair(identityKeyPair: any, keyId: any): {
-    keyPair: {
-        private: any;
-        public: any;
-    };
-    signature: any;
-    keyId: any;
-};
+export declare function aesDecryptWithIV(buffer: Uint8Array, key: Uint8Array, IV: Uint8Array): Buffer<ArrayBuffer>;
+export declare function aesEncrypt(buffer: Uint8Array, key: Uint8Array): Buffer<ArrayBuffer>;
+export declare function aesEncrypWithIV(buffer: Buffer, key: Buffer, IV: Buffer): Buffer<ArrayBuffer>;
+export declare function hmacSign(buffer: Buffer | Uint8Array, key: Buffer | Uint8Array, variant?: 'sha256' | 'sha512'): NonSharedBuffer;
+export declare function sha256(buffer: Buffer): NonSharedBuffer;
+export declare function derivePairingCodeKey(pairingCode: string, salt: Buffer): Promise<Buffer>;
 //# sourceMappingURL=crypto.d.ts.map

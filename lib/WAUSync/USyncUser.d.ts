@@ -1,17 +1,17 @@
-export class USyncUser {
-    withId(id: any): this;
-    id: any;
-    withLid(lid: any): this;
-    lid: any;
-    withPhone(phone: any): this;
-    phone: any;
-    withUsername(username: any): this;
-    username: any;
-    withUsernameKey(usernameKey: any): this;
-    usernameKey: any;
-    withType(type: any): this;
-    type: any;
-    withPersonaId(personaId: any): this;
-    personaId: any;
+export declare class USyncUser {
+    id?: string;
+    lid?: string;
+    phone?: string;
+    username?: string;
+    usernameKey?: string;
+    type?: string;
+    personaId?: string;
+    withId(id: string): this;
+    withLid(lid: string): this;
+    withPhone(phone: string): this;
+    withUsername(username: string): this;
+    withUsernameKey(usernameKey: string): this;
+    withType(type: string): this;
+    withPersonaId(personaId: string): this;
 }
 //# sourceMappingURL=USyncUser.d.ts.map

@@ -1,19 +1,19 @@
-export class SenderKeyMessage extends CiphertextMessage {
-    constructor(keyId: any, iteration: any, ciphertext: any, signatureKey: any, serialized: any);
-    SIGNATURE_LENGTH: number;
-    serialized: any;
-    messageVersion: number;
-    keyId: any;
-    iteration: any;
-    ciphertext: any;
-    signature: any;
-    getKeyId(): any;
-    getIteration(): any;
-    getCipherText(): any;
-    verifySignature(signatureKey: any): void;
-    getSignature(signatureKey: any, serialized: any): any;
-    serialize(): any;
+import { CiphertextMessage } from './ciphertext-message.js';
+export declare class SenderKeyMessage extends CiphertextMessage {
+    private readonly SIGNATURE_LENGTH;
+    private readonly messageVersion;
+    private readonly keyId;
+    private readonly iteration;
+    private readonly ciphertext;
+    private readonly signature;
+    private readonly serialized;
+    constructor(keyId?: number | null, iteration?: number | null, ciphertext?: Uint8Array | null, signatureKey?: Uint8Array | null, serialized?: Uint8Array | null);
+    getKeyId(): number;
+    getIteration(): number;
+    getCipherText(): Uint8Array;
+    verifySignature(signatureKey: Uint8Array): void;
+    private getSignature;
+    serialize(): Uint8Array;
     getType(): number;
 }
-import { CiphertextMessage } from './ciphertext-message.js';
 //# sourceMappingURL=sender-key-message.d.ts.map

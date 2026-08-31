@@ -1,3 +1,4 @@
+import type { BinaryNode } from '../WABinary/index.js';
 /**
  * Builds an ACK stanza for a received node.
  * Pure function -- no I/O, no side effects.
@@ -6,12 +7,5 @@
  * - WAWebHandleMsgSendAck.sendAck / sendNack
  * - WAWebCreateNackFromStanza.createNackFromStanza
  */
-export function buildAckStanza(node: any, errorCode: any, meId: any): {
-    tag: string;
-    attrs: {
-        id: any;
-        to: any;
-        class: any;
-    };
-};
+export declare function buildAckStanza(node: BinaryNode, errorCode?: number, meId?: string): BinaryNode;
 //# sourceMappingURL=stanza-ack.d.ts.map

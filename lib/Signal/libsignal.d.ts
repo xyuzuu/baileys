@@ -1,55 +1,5 @@
-export function makeLibSignalRepository(auth: any, logger: any, pnToLIDFunc: any): {
-    decryptGroupMessage({ group, authorJid, msg }: {
-        group: any;
-        authorJid: any;
-        msg: any;
-    }): any;
-    processSenderKeyDistributionMessage({ item, authorJid }: {
-        item: any;
-        authorJid: any;
-    }): Promise<any>;
-    decryptMessage({ jid, type, ciphertext }: {
-        jid: any;
-        type: any;
-        ciphertext: any;
-    }): Promise<any>;
-    encryptMessage({ jid, data }: {
-        jid: any;
-        data: any;
-    }): Promise<any>;
-    encryptGroupMessage({ group, meId, data }: {
-        group: any;
-        meId: any;
-        data: any;
-    }): Promise<any>;
-    getSenderKeyDistributionMessage({ group, meId }: {
-        group: any;
-        meId: any;
-    }): Promise<any>;
-    hasSenderKey({ group, meId }: {
-        group: any;
-        meId: any;
-    }): Promise<boolean>;
-    getSessionInfo(jid: any): Promise<{
-        baseKey: Uint8Array<any>;
-        registrationId: number;
-    } | null>;
-    injectE2ESession({ jid, session }: {
-        jid: any;
-        session: any;
-    }): Promise<any>;
-    jidToSignalProtocolAddress(jid: any): any;
-    lidMapping: LIDMappingStore;
-    validateSession(jid: any): Promise<{
-        exists: boolean;
-        reason: string;
-    } | {
-        exists: boolean;
-        reason?: undefined;
-    }>;
-    deleteSession(jids: any): Promise<any>;
-    close(): void;
-    migrateSession(fromJid: any, toJid: any): Promise<any>;
-};
-import { LIDMappingStore } from './lid-mapping.js';
+import type { LIDMapping, SignalAuthState } from '../Types/index.js';
+import type { SignalRepositoryWithLIDStore } from '../Types/Signal.js';
+import type { ILogger } from '../Utils/logger.js';
+export declare function makeLibSignalRepository(auth: SignalAuthState, logger: ILogger, pnToLIDFunc?: (jids: string[]) => Promise<LIDMapping[] | undefined>): SignalRepositoryWithLIDStore;
 //# sourceMappingURL=libsignal.d.ts.map

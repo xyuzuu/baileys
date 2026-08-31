@@ -1,10 +1,10 @@
-export class CiphertextMessage {
-    UNSUPPORTED_VERSION: number;
-    CURRENT_VERSION: number;
-    WHISPER_TYPE: number;
-    PREKEY_TYPE: number;
-    SENDERKEY_TYPE: number;
-    SENDERKEY_DISTRIBUTION_TYPE: number;
-    ENCRYPTED_MESSAGE_OVERHEAD: number;
+export declare class CiphertextMessage {
+    readonly UNSUPPORTED_VERSION: number;
+    readonly CURRENT_VERSION: number;
+    readonly WHISPER_TYPE: number;
+    readonly PREKEY_TYPE: number;
+    readonly SENDERKEY_TYPE: number;
+    readonly SENDERKEY_DISTRIBUTION_TYPE: number;
+    readonly ENCRYPTED_MESSAGE_OVERHEAD: number;
 }
 //# sourceMappingURL=ciphertext-message.d.ts.map

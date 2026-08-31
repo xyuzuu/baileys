@@ -1,83 +1,47 @@
-export function createSignalIdentity(wid: any, accountSignatureKey: any): {
-    identifier: {
-        name: any;
-        deviceId: number;
+import type { SignalRepositoryWithLIDStore } from '../Types/index.js';
+import type { AuthenticationCreds, AuthenticationState, KeyPair, SignalIdentity, SignalKeyStore, SignedKeyPair } from '../Types/Auth.js';
+import { type BinaryNode, type FullJid } from '../WABinary/index.js';
+import type { USyncQueryResultList } from '../WAUSync/index.js';
+export declare const createSignalIdentity: (wid: string, accountSignatureKey: Uint8Array) => SignalIdentity;
+export declare const getPreKeys: ({ get }: SignalKeyStore, min: number, limit: number) => Promise<{
+    [id: string]: KeyPair;
+}>;
+export declare const generateOrGetPreKeys: (creds: AuthenticationCreds, range: number) => {
+    newPreKeys: {
+        [id: number]: KeyPair;
     };
-    identifierKey: any;
-};
-export function getPreKeys({ get }: {
-    get: any;
-}, min: any, limit: any): Promise<any>;
-export function generateOrGetPreKeys(creds: any, range: any): {
-    newPreKeys: {};
     lastPreKeyId: number;
-    preKeysRange: any[];
+    preKeysRange: readonly [number, number];
 };
-export function xmppSignedPreKey(key: any): {
-    tag: string;
-    attrs: {};
-    content: {
-        tag: string;
-        attrs: {};
-        content: any;
-    }[];
-};
-export function xmppPreKey(pair: any, id: any): {
-    tag: string;
-    attrs: {};
-    content: {
-        tag: string;
-        attrs: {};
-        content: any;
-    }[];
-};
-export function extractE2ESessionFromRetryReceipt(receipt: any): {
-    registrationId: number | undefined;
-    identityKey: any;
+export declare const xmppSignedPreKey: (key: SignedKeyPair) => BinaryNode;
+export declare const xmppPreKey: (pair: KeyPair, id: number) => BinaryNode;
+export declare const extractE2ESessionFromRetryReceipt: (receipt: BinaryNode) => {
+    registrationId: number;
+    identityKey: Uint8Array<ArrayBufferLike> | Buffer<ArrayBufferLike>;
     signedPreKey: {
-        keyId: number | undefined;
-        publicKey: any;
-        signature: any;
+        keyId: number;
+        publicKey: Uint8Array<ArrayBufferLike> | Buffer<ArrayBufferLike>;
+        signature: Uint8Array<ArrayBufferLike> | Buffer<ArrayBufferLike>;
     };
     preKey: {
-        keyId: number | undefined;
-        publicKey: any;
+        keyId: number;
+        publicKey: Uint8Array;
     } | undefined;
 } | null;
-export function parseAndInjectE2ESessions(node: any, repository: any): Promise<void>;
-export function extractDeviceJids(result: any, myJid: any, myLid: any, excludeZeroDevices: any): {
-    user: any;
-    device: any;
-    domainType: any;
-    server: any;
-}[];
-export function getNextPreKeys({ creds, keys }: {
-    creds: any;
-    keys: any;
-}, count: any): Promise<{
-    update: {
-        nextPreKeyId: number;
-        firstUnuploadedPreKeyId: number;
+export declare const parseAndInjectE2ESessions: (node: BinaryNode, repository: SignalRepositoryWithLIDStore) => Promise<void>;
+export declare const extractDeviceJids: (result: USyncQueryResultList[], myJid: string, myLid: string, excludeZeroDevices: boolean) => FullJid[];
+/**
+ * get the next N keys for upload or processing
+ * @param count number of pre-keys to get or generate
+ */
+export declare const getNextPreKeys: ({ creds, keys }: AuthenticationState, count: number) => Promise<{
+    update: Partial<AuthenticationCreds>;
+    preKeys: {
+        [id: string]: KeyPair;
     };
-    preKeys: any;
 }>;
-export function getNextPreKeysNode(state: any, count: any): Promise<{
-    update: {
-        nextPreKeyId: number;
-        firstUnuploadedPreKeyId: number;
-    };
-    node: {
-        tag: string;
-        attrs: {
-            xmlns: string;
-            type: string;
-            to: string;
-        };
-        content: {
-            tag: string;
-            attrs: {};
-            content: any;
-        }[];
-    };
+export declare const getNextPreKeysNode: (state: AuthenticationState, count: number) => Promise<{
+    update: Partial<AuthenticationCreds>;
+    node: BinaryNode;
 }>;
 //# sourceMappingURL=signal.d.ts.map

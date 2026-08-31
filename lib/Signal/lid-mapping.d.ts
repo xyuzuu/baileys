@@ -1,18 +1,20 @@
-export class LIDMappingStore {
-    constructor(keys: any, logger: any, pnToLIDFunc: any);
-    mappingCache: any;
-    inflightLIDLookups: Map<any, any>;
-    inflightPNLookups: Map<any, any>;
-    keys: any;
-    pnToLIDFunc: any;
-    logger: any;
-    storeLIDPNMappings(pairs: any): Promise<void>;
-    getLIDForPN(pn: any): Promise<any>;
-    getLIDsForPNs(pns: any): Promise<any>;
-    _getLIDsForPNsImpl(pns: any): Promise<any[] | null>;
-    getPNForLID(lid: any): Promise<any>;
-    getPNsForLIDs(lids: any): Promise<any>;
-    _getPNsForLIDsImpl(lids: any): Promise<any[] | null>;
+import type { LIDMapping, SignalKeyStoreWithTransaction } from '../Types/index.js';
+import type { ILogger } from '../Utils/logger.js';
+export declare class LIDMappingStore {
+    private readonly mappingCache;
+    private readonly keys;
+    private readonly logger;
+    private pnToLIDFunc?;
+    private readonly inflightLIDLookups;
+    private readonly inflightPNLookups;
+    constructor(keys: SignalKeyStoreWithTransaction, logger: ILogger, pnToLIDFunc?: (jids: string[]) => Promise<LIDMapping[] | undefined>);
+    storeLIDPNMappings(pairs: LIDMapping[]): Promise<void>;
+    getLIDForPN(pn: string): Promise<string | null>;
+    getLIDsForPNs(pns: string[]): Promise<LIDMapping[] | null>;
+    private _getLIDsForPNsImpl;
+    getPNForLID(lid: string): Promise<string | null>;
+    getPNsForLIDs(lids: string[]): Promise<LIDMapping[] | null>;
+    private _getPNsForLIDsImpl;
     /**
      * Close the cache and release resources
      */

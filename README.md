@@ -5,8 +5,6 @@
 
 1. Original Repository : [WhiskeySockets](https://github.com/whiskeySockets/Baileys/)
 
-2. Fixed **groupStatus** media & **Send media to Newsletter** & **ProfilePictureUrl** code from : [baileys](https://github.com/WhiskeySockets/Baileys/issues/2589)
+2. Fixed **groupStatus** media & **Send media to Newsletter** & **ProfilePictureUrl** from : [baileys](https://github.com/WhiskeySockets/Baileys/issues/2589)
 
-3. Add **Passkey** issues from : [Issues](https://github.com/whiskeysockets/Baileys/issues/2672)
-
-4. Add **RichResponse** & **Store** code from : [itsliaaa](https://github.com/itsliaaa/baileys)
+3. Add **RichMessage** from : [itslia](https://github.com/itsliaaa/baileys)

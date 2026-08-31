@@ -1,26 +1,28 @@
+import type { SignalDataSet, SignalDataTypeMap, SignalKeyStore } from '../Types/index.js';
+import type { ILogger } from './logger.js';
 /**
  * Manages pre-key operations with proper concurrency control
  */
-export class PreKeyManager {
-    constructor(store: any, logger: any);
-    store: any;
-    logger: any;
-    queues: Map<any, any>;
+export declare class PreKeyManager {
+    private readonly store;
+    private readonly logger;
+    private readonly queues;
+    constructor(store: SignalKeyStore, logger: ILogger);
     /**
      * Get or create a queue for a specific key type
      */
-    getQueue(keyType: any): any;
+    private getQueue;
     /**
      * Process pre-key operations (updates and deletions)
      */
-    processOperations(data: any, keyType: any, transactionCache: any, mutations: any, isInTransaction: any): Promise<any>;
+    processOperations(data: SignalDataSet, keyType: keyof SignalDataTypeMap, transactionCache: SignalDataSet, mutations: SignalDataSet, isInTransaction: boolean): Promise<void>;
     /**
      * Process deletions with validation
      */
-    processDeletions(keyType: any, ids: any, transactionCache: any, mutations: any, isInTransaction: any): Promise<void>;
+    private processDeletions;
     /**
      * Validate and process pre-key deletions outside transactions
      */
-    validateDeletions(data: any, keyType: any): Promise<any>;
+    validateDeletions(data: SignalDataSet, keyType: keyof SignalDataTypeMap): Promise<void>;
 }
 //# sourceMappingURL=pre-key-manager.d.ts.map

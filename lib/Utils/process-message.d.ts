@@ -1,84 +1,67 @@
+import { proto } from '../../WAProto/index.js';
+import type { AuthenticationCreds, BaileysEventEmitter, CacheStore, SignalKeyStoreWithTransaction, SignalRepositoryWithLIDStore, SocketConfig, WAMessage, WAMessageKey } from '../Types/index.js';
+import type { ILogger } from './logger.js';
+type ProcessMessageContext = {
+    shouldProcessHistoryMsg: boolean;
+    placeholderResendCache?: CacheStore;
+    creds: AuthenticationCreds;
+    keyStore: SignalKeyStoreWithTransaction;
+    ev: BaileysEventEmitter;
+    logger?: ILogger;
+    options: RequestInit;
+    signalRepository: SignalRepositoryWithLIDStore;
+    getMessage: SocketConfig['getMessage'];
+};
+/** Cleans a received message to further processing */
+export declare const cleanMessage: (message: WAMessage, meId: string, meLid: string) => void;
+export declare const isRealMessage: (message: WAMessage) => boolean;
+export declare const shouldIncrementChatUnread: (message: WAMessage) => boolean;
+/**
+ * Get the ID of the chat from the given key.
+ * Typically -- that'll be the remoteJid, but for broadcasts, it'll be the participant
+ */
+export declare const getChatId: ({ remoteJid, participant, fromMe }: WAMessageKey) => string;
+type PollContext = {
+    /** normalised jid of the person that created the poll */
+    pollCreatorJid: string;
+    /** ID of the poll creation message */
+    pollMsgId: string;
+    /** poll creation message enc key */
+    pollEncKey: Uint8Array;
+    /** jid of the person that voted */
+    voterJid: string;
+};
+type EventContext = {
+    /** normalised jid of the person that created the event */
+    eventCreatorJid: string;
+    /** ID of the event creation message */
+    eventMsgId: string;
+    /** event creation message enc key */
+    eventEncKey: Uint8Array;
+    /** jid of the person that responded */
+    responderJid: string;
+};
+export declare function decryptPollVoteWithLidFallback(encryptedVote: proto.Message.IPollEncValue, opts: {
+    pollEncKey: Uint8Array;
+    pollCreationMsgKey: WAMessageKey;
+    voteMsgKey: WAMessageKey;
+    meId: string;
+    meLid?: string;
+}): proto.Message.PollVoteMessage | undefined;
 /**
  * Decrypt a poll vote
  * @param vote encrypted vote
  * @param ctx additional info about the poll required for decryption
  * @returns list of SHA256 options
  */
-export function decryptPollVote({ encPayload, encIv }: {
-    encPayload: any;
-    encIv: any;
-}, { pollCreatorJid, pollMsgId, pollEncKey, voterJid }: {
-    pollCreatorJid: any;
-    pollMsgId: any;
-    pollEncKey: any;
-    voterJid: any;
-}): proto.Message.PollVoteMessage;
+export declare function decryptPollVote({ encPayload, encIv }: proto.Message.IPollEncValue, { pollCreatorJid, pollMsgId, pollEncKey, voterJid }: PollContext): proto.Message.PollVoteMessage;
 /**
  * Decrypt an event response
  * @param response encrypted event response
  * @param ctx additional info about the event required for decryption
  * @returns event response message
  */
-export function decryptEventResponse({ encPayload, encIv }: {
-    encPayload: any;
-    encIv: any;
-}, { eventCreatorJid, eventMsgId, eventEncKey, responderJid }: {
-    eventCreatorJid: any;
-    eventMsgId: any;
-    eventEncKey: any;
-    responderJid: any;
-}): proto.Message.EventResponseMessage;
-/**
- * Decrypt a `secretEncryptedMessage` carrying a `MESSAGE_EDIT` payload.
- *
- * WhatsApp started wrapping message edits in an E2EE envelope (May 2026).
- * The new content is encrypted with a key derived from the original
- * message's `messageContextInfo.messageSecret` using HKDF-SHA256
- * + AES-256-GCM, same family as polls and event responses but with
- * different constants (validated against live WhatsApp Android traffic):
- *
- *   info = msgId || origSenderJid || editorJid || "Message Edit"
- *   aad  = (empty)              <-- differs from Poll Vote / Event Response
- *   key  = HKDF-SHA256(salt=zeros, ikm=messageSecret, info, L=32)
- *
- * The decrypted plaintext is a regular `proto.Message` whose
- * `protocolMessage.editedMessage` field holds the new content — same
- * shape as the legacy `protocolMessage.editedMessage` edit path, so
- * consumers can treat the result identically.
- *
- * @param edit encrypted edit payload (encPayload + encIv from SecretEncryptedMessage)
- * @param ctx info about the original message required for decryption
- * @returns decoded outer `Message` whose `protocolMessage.editedMessage`
- *   carries the new content (extendedTextMessage / conversation / etc.)
- */
-export function decryptMessageEdit({ encPayload, encIv }: {
-    encPayload: any;
-    encIv: any;
-}, { originalSenderJid, originalMsgId, editEncKey, editorJid }: {
-    originalSenderJid: any;
-    originalMsgId: any;
-    editEncKey: any;
-    editorJid: any;
-}): proto.Message;
-export function cleanMessage(message: any, meId: any, meLid: any): void;
-export function isRealMessage(message: any): boolean;
-export function shouldIncrementChatUnread(message: any): boolean;
-export function getChatId({ remoteJid, participant, fromMe }: {
-    remoteJid: any;
-    participant: any;
-    fromMe: any;
-}): any;
+export declare function decryptEventResponse({ encPayload, encIv }: proto.Message.IPollEncValue, { eventCreatorJid, eventMsgId, eventEncKey, responderJid }: EventContext): proto.Message.EventResponseMessage;
+declare const processMessage: (message: WAMessage, { shouldProcessHistoryMsg, placeholderResendCache, ev, creds, signalRepository, keyStore, logger, options, getMessage }: ProcessMessageContext) => Promise<void>;
 export default processMessage;
-import { proto } from '../../WAProto/index.js';
-declare function processMessage(message: any, { shouldProcessHistoryMsg, placeholderResendCache, ev, creds, signalRepository, keyStore, logger, options, getMessage }: {
-    shouldProcessHistoryMsg: any;
-    placeholderResendCache: any;
-    ev: any;
-    creds: any;
-    signalRepository: any;
-    keyStore: any;
-    logger: any;
-    options: any;
-    getMessage: any;
-}): Promise<void>;
 //# sourceMappingURL=process-message.d.ts.map

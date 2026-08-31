@@ -1,15 +1,11 @@
-export function buildProfilePictureQueryContent(type: any, tcTokenContent: any): {
-    tag: string;
-    attrs: {
-        type: any;
-        query: string;
-    };
-}[];
-export function makeChatsSocket(config: any): {
-    findUserId: (pnLid: any) => Promise<{
-        lid: undefined;
-        phoneNumber: undefined;
-    }>;
+import { Boom } from '@hapi/boom';
+import { proto } from '../../WAProto/index.js';
+import type { BotListInfo, CacheStore, ChatModification, MessageUpsertType, SocketConfig, WABusinessProfile, WAMediaUpload, WAMessage, WAPatchCreate, WAPresence, WAPrivacyCallValue, WAPrivacyGroupAddValue, WAPrivacyMessagesValue, WAPrivacyOnlineValue, WAPrivacyValue, WAReadReceiptsValue } from '../Types/index.js';
+import type { QuickReplyAction } from '../Types/Bussines.js';
+import type { LabelActionBody } from '../Types/Label.js';
+import { type BinaryNode } from '../WABinary/index.js';
+import { USyncQuery } from '../WAUSync/index.js';
+export declare const makeChatsSocket: (config: SocketConfig) => {
     serverProps: {
         /** AB prop 10518: gate tctoken on 1:1 messages. Default true (safe: avoids 463). */
         privacyTokenOn1to1: boolean;
@@ -18,127 +14,111 @@ export function makeChatsSocket(config: any): {
         /** AB prop 14303: issue tctokens to LID instead of PN. WA Web default: false. */
         lidTrustedTokenIssueToLid: boolean;
     };
-    createCallLink: (type: any, event: any, timeoutMs: any) => Promise<any>;
-    getBotListV2: () => Promise<{
-        jid: any;
-        personaId: any;
-    }[]>;
+    createCallLink: (type: "audio" | "video", event?: {
+        startTime: number;
+    }, timeoutMs?: number) => Promise<string | undefined>;
+    getBotListV2: () => Promise<BotListInfo[]>;
     messageMutex: {
-        mutex(code: any): any;
+        mutex<T>(code: () => Promise<T> | T): Promise<T>;
     };
     receiptMutex: {
-        mutex(code: any): any;
+        mutex<T>(code: () => Promise<T> | T): Promise<T>;
     };
     appStatePatchMutex: {
-        mutex(code: any): any;
+        mutex<T>(code: () => Promise<T> | T): Promise<T>;
     };
     notificationMutex: {
-        mutex(code: any): any;
+        mutex<T>(code: () => Promise<T> | T): Promise<T>;
     };
-    fetchPrivacySettings: (force?: boolean) => Promise<any>;
-    upsertMessage: (...args: any[]) => Promise<any>;
-    appPatch: (patchCreate: any) => Promise<void>;
-    sendPresenceUpdate: (type: any, toJid: any) => Promise<void>;
-    presenceSubscribe: (toJid: any) => Promise<void>;
-    profilePictureUrl: (jid: any, type?: string, timeoutMs?: number, shouldIncludeTcToken?: boolean) => Promise<any>;
-    fetchBlocklist: () => Promise<any>;
-    fetchStatus: (...jids: any[]) => Promise<any>;
-    fetchDisappearingDuration: (...jids: any[]) => Promise<any>;
-    updateProfilePicture: (jid: any, content: any, dimensions: any) => Promise<void>;
-    removeProfilePicture: (jid: any) => Promise<void>;
-    updateProfileStatus: (status: any) => Promise<void>;
-    updateProfileName: (name: any) => Promise<void>;
-    updateBlockStatus: (jid: any, action: any) => Promise<void>;
-    updateDisableLinkPreviewsPrivacy: (isPreviewsDisabled: any) => Promise<void>;
-    updateCallPrivacy: (value: any) => Promise<void>;
-    updateMessagesPrivacy: (value: any) => Promise<void>;
-    updateLastSeenPrivacy: (value: any) => Promise<void>;
-    updateOnlinePrivacy: (value: any) => Promise<void>;
-    updateProfilePicturePrivacy: (value: any) => Promise<void>;
-    updateStatusPrivacy: (value: any) => Promise<void>;
-    updateReadReceiptsPrivacy: (value: any) => Promise<void>;
-    updateGroupsAddPrivacy: (value: any) => Promise<void>;
-    updateDefaultDisappearingMode: (duration: any) => Promise<void>;
-    getBusinessProfile: (jid: any) => Promise<{
-        wid: any;
-        address: any;
-        description: any;
-        website: any[];
-        email: any;
-        category: any;
-        business_hours: {
-            timezone: any;
-            business_config: any;
-        };
-    } | undefined>;
-    resyncAppState: (...args: any[]) => Promise<any>;
-    chatModify: (mod: any, jid: any) => Promise<void>;
-    cleanDirtyBits: (type: any, fromTimestamp: any) => Promise<void>;
-    addOrEditContact: (jid: any, contact: any) => Promise<void>;
-    removeContact: (jid: any) => Promise<void>;
-    placeholderResendCache: any;
-    addLabel: (jid: any, labels: any) => Promise<void>;
-    addChatLabel: (jid: any, labelId: any) => Promise<void>;
-    removeChatLabel: (jid: any, labelId: any) => Promise<void>;
-    addMessageLabel: (jid: any, messageId: any, labelId: any) => Promise<void>;
-    removeMessageLabel: (jid: any, messageId: any, labelId: any) => Promise<void>;
-    star: (jid: any, messages: any, star: any) => Promise<void>;
-    addOrEditQuickReply: (quickReply: any) => Promise<void>;
-    removeQuickReply: (timestamp: any) => Promise<void>;
-    type: string;
+    fetchPrivacySettings: (force?: boolean) => Promise<{
+        [_: string]: string;
+    }>;
+    upsertMessage: (msg: WAMessage, type: MessageUpsertType) => Promise<void>;
+    appPatch: (patchCreate: WAPatchCreate) => Promise<void>;
+    sendPresenceUpdate: (type: WAPresence, toJid?: string) => Promise<void>;
+    presenceSubscribe: (toJid: string) => Promise<void>;
+    profilePictureUrl: (jid: string, type?: "preview" | "image", timeoutMs?: number) => Promise<string | undefined>;
+    fetchBlocklist: () => Promise<(string | undefined)[]>;
+    fetchStatus: (...jids: string[]) => Promise<import("../WAUSync/index.js").USyncQueryResultList[] | undefined>;
+    fetchDisappearingDuration: (...jids: string[]) => Promise<import("../WAUSync/index.js").USyncQueryResultList[] | undefined>;
+    updateProfilePicture: (jid: string, content: WAMediaUpload, dimensions?: {
+        width: number;
+        height: number;
+    }) => Promise<void>;
+    removeProfilePicture: (jid: string) => Promise<void>;
+    updateProfileStatus: (status: string) => Promise<void>;
+    updateProfileName: (name: string) => Promise<void>;
+    updateBlockStatus: (jid: string, action: "block" | "unblock") => Promise<void>;
+    updateDisableLinkPreviewsPrivacy: (isPreviewsDisabled: boolean) => Promise<void>;
+    updateCallPrivacy: (value: WAPrivacyCallValue) => Promise<void>;
+    updateMessagesPrivacy: (value: WAPrivacyMessagesValue) => Promise<void>;
+    updateLastSeenPrivacy: (value: WAPrivacyValue) => Promise<void>;
+    updateOnlinePrivacy: (value: WAPrivacyOnlineValue) => Promise<void>;
+    updateProfilePicturePrivacy: (value: WAPrivacyValue) => Promise<void>;
+    updateStatusPrivacy: (value: WAPrivacyValue) => Promise<void>;
+    updateReadReceiptsPrivacy: (value: WAReadReceiptsValue) => Promise<void>;
+    updateGroupsAddPrivacy: (value: WAPrivacyGroupAddValue) => Promise<void>;
+    updateDefaultDisappearingMode: (duration: number) => Promise<void>;
+    getBusinessProfile: (jid: string) => Promise<WABusinessProfile | void>;
+    resyncAppState: (collections: readonly ("critical_unblock_low" | "regular_high" | "regular_low" | "critical_block" | "regular")[], isInitialSync: boolean) => Promise<void>;
+    chatModify: (mod: ChatModification, jid: string) => Promise<void>;
+    cleanDirtyBits: (type: "account_sync" | "groups", fromTimestamp?: number | string) => Promise<void>;
+    addOrEditContact: (jid: string, contact: proto.SyncActionValue.IContactAction) => Promise<void>;
+    removeContact: (jid: string) => Promise<void>;
+    placeholderResendCache: CacheStore;
+    addLabel: (jid: string, labels: LabelActionBody) => Promise<void>;
+    addChatLabel: (jid: string, labelId: string) => Promise<void>;
+    removeChatLabel: (jid: string, labelId: string) => Promise<void>;
+    addMessageLabel: (jid: string, messageId: string, labelId: string) => Promise<void>;
+    removeMessageLabel: (jid: string, messageId: string, labelId: string) => Promise<void>;
+    star: (jid: string, messages: {
+        id: string;
+        fromMe?: boolean;
+    }[], star: boolean) => Promise<void>;
+    addOrEditQuickReply: (quickReply: QuickReplyAction) => Promise<void>;
+    removeQuickReply: (timestamp: string) => Promise<void>;
+    type: "md";
     ws: import("./Client/websocket.js").WebSocketClient;
-    ev: {
-        process(handler: any): () => void;
-        emit(event: any, evData: any): any;
+    ev: import("../Types/index.js").BaileysEventEmitter & {
+        process(handler: (events: Partial<import("../Types/index.js").BaileysEventMap>) => void | Promise<void>): () => void;
+        buffer(): void;
+        createBufferedFunction<A extends any[], T>(work: (...args: A) => Promise<T>): (...args: A) => Promise<T>;
+        flush(): boolean;
         isBuffering(): boolean;
-        buffer: () => void;
-        flush: () => boolean;
-        createBufferedFunction(work: any): (...args: any[]) => Promise<any>;
-        on: (...args: any[]) => any;
-        off: (...args: any[]) => any;
-        removeAllListeners: (...args: any[]) => any;
         destroy(): void;
     };
     authState: {
-        creds: any;
-        keys: {
-            get: (type: any, ids: any) => Promise<any>;
-            set: (data: any) => Promise<void>;
-            isInTransaction: () => boolean;
-            transaction: (work: any, key: any) => Promise<any>;
-        };
+        creds: import("../Types/index.js").AuthenticationCreds;
+        keys: import("../Types/index.js").SignalKeyStoreWithTransaction;
     };
-    signalRepository: any;
-    user: any;
+    signalRepository: import("../Types/index.js").SignalRepositoryWithLIDStore;
+    user: import("../Types/index.js").Contact | undefined;
     generateMessageTag: () => string;
-    query: (node: any, timeoutMs: any) => Promise<any>;
-    waitForMessage: (msgId: any, timeoutMs?: any) => Promise<any>;
+    query: (node: BinaryNode, timeoutMs?: number) => Promise<any>;
+    waitForMessage: <T>(msgId: string, timeoutMs?: number | undefined) => Promise<T | undefined>;
     waitForSocketOpen: () => Promise<void>;
-    sendRawMessage: (data: any) => Promise<void>;
-    sendNode: (frame: any) => Promise<void>;
-    logout: (msg: any) => Promise<void>;
-    end: (error: any) => Promise<void>;
-    registerSocketEndHandler: (handler: any) => void;
-    onUnexpectedError: (err: any, msg: any) => void;
+    sendRawMessage: (data: Uint8Array | Buffer) => Promise<void>;
+    sendNode: (frame: BinaryNode) => Promise<void>;
+    logout: (msg?: string) => Promise<void>;
+    end: (error: Error | undefined) => Promise<void>;
+    registerSocketEndHandler: (handler: (error: Error | undefined) => void | Promise<void>) => void;
+    onUnexpectedError: (err: Error | Boom, msg: string) => void;
     uploadPreKeys: (count?: number) => Promise<void>;
     uploadPreKeysToServerIfRequired: () => Promise<void>;
     digestKeyBundle: () => Promise<void>;
     rotateSignedPreKey: () => Promise<void>;
-    requestPairingCode: (phoneNumber: any, customPairingCode: any) => Promise<any>;
-    updateServerTimeOffset: ({ attrs }: {
-        attrs: any;
-    }) => void;
+    requestPairingCode: (phoneNumber: string, customPairingCode?: string) => Promise<string>;
+    updateServerTimeOffset: ({ attrs }: BinaryNode) => void;
     sendUnifiedSession: () => Promise<void>;
     wamBuffer: import("../index.js").BinaryInfo;
-    waitForConnectionUpdate: (check: any, timeoutMs: any) => Promise<void>;
-    sendWAMBuffer: (wamBuffer: any) => Promise<any>;
-    executeUSyncQuery: (usyncQuery: any) => Promise<any>;
-    onWhatsApp: (...phoneNumber: any[]) => Promise<any>;
-    fetchAccountReachoutTimelock: () => Promise<{
-        isActive: boolean;
-        timeEnforcementEnds: Date | undefined;
-        enforcementType: any;
-    }>;
-    fetchNewChatMessageCap: () => Promise<any>;
+    waitForConnectionUpdate: (check: (u: Partial<import("../Types/index.js").ConnectionState>) => Promise<boolean | undefined>, timeoutMs?: number) => Promise<void>;
+    sendWAMBuffer: (wamBuffer: Buffer) => Promise<any>;
+    executeUSyncQuery: (usyncQuery: USyncQuery) => Promise<import("../WAUSync/index.js").USyncQueryResult | undefined>;
+    onWhatsApp: (...phoneNumber: string[]) => Promise<{
+        jid: string;
+        exists: boolean;
+    }[] | undefined>;
+    fetchAccountReachoutTimelock: () => Promise<import("../Types/index.js").ReachoutTimelockState>;
+    fetchNewChatMessageCap: () => Promise<import("../Types/index.js").NewChatMessageCapInfo>;
 };
 //# sourceMappingURL=chats.d.ts.map

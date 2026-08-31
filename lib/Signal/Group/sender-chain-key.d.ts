@@ -1,14 +1,14 @@
-export class SenderChainKey {
-    constructor(iteration: any, chainKey: any);
-    MESSAGE_KEY_SEED: any;
-    CHAIN_KEY_SEED: any;
-    iteration: any;
-    chainKey: any;
-    getIteration(): any;
+import { SenderMessageKey } from './sender-message-key.js';
+export declare class SenderChainKey {
+    private readonly MESSAGE_KEY_SEED;
+    private readonly CHAIN_KEY_SEED;
+    private readonly iteration;
+    private readonly chainKey;
+    constructor(iteration: number, chainKey: Uint8Array | Buffer);
+    getIteration(): number;
     getSenderMessageKey(): SenderMessageKey;
     getNext(): SenderChainKey;
-    getSeed(): any;
-    getDerivative(seed: any, key: any): any;
+    getSeed(): Uint8Array;
+    private getDerivative;
 }
-import { SenderMessageKey } from './sender-message-key.js';
 //# sourceMappingURL=sender-chain-key.d.ts.map
