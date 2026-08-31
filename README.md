@@ -9,4 +9,4 @@
 
 3. Add **Passkey** issues from : [Issues](https://github.com/whiskeysockets/Baileys/issues/2672)
 
-4. Add **RichResponse** code from : [itsliaaa](https://github.com/itsliaaa/baileys/blob/main/lib/Utils/rich-message-utils.js)
+4. Add **RichResponse** & **Store** code from : [itsliaaa](https://github.com/itsliaaa/baileys)
