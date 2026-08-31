@@ -1,0 +1,12 @@
+### BAILEYS
+
+> [!NOTE] 
+> This is the original Baileys v7.0.0-rc.10 with minor fixes.
+
+1. Original Repository : [WhiskeySockets](https://github.com/whiskeySockets/Baileys/)
+
+2. Fixed **groupStatus** media & **Send media to Newsletter** & **ProfilePictureUrl** code from : [baileys](https://github.com/WhiskeySockets/Baileys/issues/2589)
+
+3. Add **Passkey** issues from : [Issues](https://github.com/whiskeysockets/Baileys/issues/2672)
+
+4. Add **RichResponse** code from : [itsliaaa](https://github.com/itsliaaa/baileys/blob/main/lib/Utils/rich-message-utils.js)
